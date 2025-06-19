@@ -80,20 +80,27 @@ print("\n=== Monte-Carlo Summary (N = {:,}, T = {}) ===".format(N, T))
 print(full_summary.to_string(float_format="{:0.4f}".format))
 
 # --------------------- 6. CDF Plot -------------------------------------- #
-sorted_cur = np.sort(P_cur)
+import numpy as np
+import matplotlib.pyplot as plt
+
+sorted_cur  = np.sort(P_cur)
 sorted_lazy = np.sort(P_lazy)
+sorted_opt  = np.sort(P_opt)
 cdf = np.linspace(0.0, 1.0, N)
 
-plt.figure(figsize=(6, 4))
-plt.plot(sorted_cur, cdf, label="Curious Agent", color="#2c7fb8")   # modern teal-blue
-plt.plot(sorted_lazy, cdf, label="Lazy Agent", linestyle='--', color="#f46d43")  # modern coral-orange
-plt.xlabel(r"Terminal performance $P_T$")
-plt.ylabel("Cumulative probability")
-plt.legend()
-plt.tight_layout()
+fig, ax = plt.subplots(figsize=(8, 4), constrained_layout=True)
 
+ax.plot(sorted_cur,  cdf, label="Curious Agent",  color="#2c7fb8")
+ax.plot(sorted_lazy, cdf, label="Lazy Agent",     linestyle='--', color="red")   # now bright red
+ax.plot(sorted_opt,  cdf, label="Optimal Agent",  linestyle='-.', color="#4daf4a")
 
-# Save the figure in high resolution (e.g., 300 DPI)
-plt.savefig("CDF.png", dpi=300)
+ax.set_xlabel(r"Terminal performance $P_T$")
+ax.set_ylabel("Cumulative probability")
 
-plt.show()
+ax.legend(
+    loc='center left',
+    bbox_to_anchor=(1.02, 0.5),
+    frameon=False
+)
+
+fig.savefig("CDFDad.png", dpi=300, bbox_inches='tight')
